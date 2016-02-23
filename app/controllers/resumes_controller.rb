@@ -16,10 +16,10 @@ class ResumesController < ApplicationController
 
     pdf = Prawn::Document.new
 
-      # require "open-uri"
-      # pdf.image open("image_url"), :scale =>0.25
+    require "open-uri"
+    pdf.image open(student["photo"]), :scale =>0.25
 
-      # Test Info for formatting
+    pdf.move_up 70
 
     pdf.font_size 30
     pdf.text student["first_name"] + " " + student["last_name"],  align: :center, styles: [:bold], :color => "137abf"
@@ -34,11 +34,14 @@ class ResumesController < ApplicationController
 
     pdf.move_down 20
     pdf.font_size 15
-    pdf.text "On the web:", align: :center, styles: [:bold], :color => "137abf"
-    pdf.font_size 12
-    pdf.text "Linked In: " + student["linkedin_url"] + " | " + "Twitter: " + student["twitter_handle"], align: :center
+    pdf.text "On the web:", align: :center, :color => "137abf"
+    pdf.font_size 10
+    pdf.text "Linked In: " + student["linkedin_url"], align: :center
+    pdf.text "Twitter: " + student["twitter_handle"], align: :center
 
-    pdf.text "My Blog: " + student["blog_url"] + " | " + "My Online Resume: " + student["online_resume_url"], align: :center
+    pdf.text "My Blog: " + student["blog_url"], align: :center
+    pdf.text "My Online Resume: " + student["online_resume_url"], align: :center
+    pdf.text "Github: " + student["github_url"], align: :center
 
     pdf.move_down 20
     pdf.font_size 15
@@ -46,8 +49,10 @@ class ResumesController < ApplicationController
     pdf.font_size 12
 
     experiences.each do |experience|
-      pdf.text experience["job_title"] + " | " + experience["company_name"], styles: [:bold]
-      pdf.text experience["start_date"] + " - " + experience["end_date"]
+      pdf.move_down 10 
+      pdf.text experience["job_title"] + " | " + experience["company_name"], style: :bold
+      pdf.text friendly_date(experience["start_date"]) + " - " + friendly_date(experience["end_date"])
+      pdf.move_down 5
       pdf.text experience["details"]
     end
 
@@ -60,9 +65,10 @@ class ResumesController < ApplicationController
     pdf.font_size 12
 
     educations.each do |education|
-      pdf.text education["university_name"]
+      pdf.move_down 10 
+      pdf.text education["university_name"], style: :bold
       pdf.text education["degree"]
-      pdf.text education["start_date"] + " - " + education["end_date"]
+      pdf.text friendly_date(education["start_date"]) + " - " + friendly_date(education["end_date"])
       pdf.text education["details"]
     end
 
@@ -75,7 +81,8 @@ class ResumesController < ApplicationController
     pdf.font_size 12
 
     skills.each do |skill|
-      pdf.text skill["skill_name"]
+      pdf.move_down 10 
+      pdf.text "* " + skill["skill_name"]
     end
 
     send_data pdf.render, type: "application/pdf", disposition: "inline"
