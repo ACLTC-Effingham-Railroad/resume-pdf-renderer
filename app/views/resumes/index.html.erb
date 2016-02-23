@@ -1,4 +1,22 @@
-<h1>Hello!</h1>
-<p>Welcome to the Resume PDF Renderer Application</p>
+<div class="container">
+<div class="jumbotron">
+  <p>Manny says...</p>
+  <h1>"Render Your Resume!!!"</h1>
+  <p>Please click a name to render a pdf resume.</p>
 
-<%= link_to "Render PDF Resume", "/resumes?render=id", class: "btn btn-default" %>
+<ul>
+
+<% @students.each do |student| %>
+
+  <li><%= link_to "#{student["first_name"]} #{student["last_name"]}", "/resumes/#{student["id"]}", class: "btn btn-default" %></li>
+  <br>
+
+<% end %>
+
+</ul>
+</div>
+
+
+<hr>
+</div>
+
