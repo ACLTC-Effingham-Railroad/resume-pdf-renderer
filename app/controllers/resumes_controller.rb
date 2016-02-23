@@ -85,6 +85,22 @@ class ResumesController < ApplicationController
       pdf.text "* " + skill["skill_name"]
     end
 
+    pdf.move_down 10
+    pdf.stroke_horizontal_rule
+
+    pdf.move_down 20
+    pdf.font_size 15
+    pdf.text "Projects:", align: :center, styles: [:bold], :color => "137abf"
+    pdf.font_size 12
+
+    capstones.each do |capstone|
+      pdf.move_down 10 
+      pdf.text capstone["name"]
+      pdf.text capstone["description"]
+      pdf.text capstone["url"]
+      pdf.image open(capstone["screenshot"]), :scale =>0.25
+    end
+
     send_data pdf.render, type: "application/pdf", disposition: "inline"
   end
 
