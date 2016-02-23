@@ -2,12 +2,12 @@ class ResumesController < ApplicationController
 
   def index
 
-    @students = Unirest.get("http://localhost:3001/students").body
+    @students = Unirest.get("https://calm-wildwood-62465.herokuapp.com/students").body
 
   end
 
   def show
-    student = Unirest.get("http://localhost:3001/students/#{params[:id]}").body
+    student = Unirest.get("https://calm-wildwood-62465.herokuapp.com/students/#{params[:id]}").body
 
     experiences = student["experiences"]
     educations = student["educations"]
@@ -20,12 +20,13 @@ class ResumesController < ApplicationController
       # pdf.image open("image_url"), :scale =>0.25
 
       # Test Info for formatting
+
     pdf.font_size 30
     pdf.text student["first_name"] + " " + student["last_name"],  align: :center, styles: [:bold], :color => "137abf"
     pdf.font_size 15
     pdf.text student["phone_number"] + " | " + student["email"], align: :center
 
-    pdf.move_down 35
+    pdf.move_down 25
     pdf.font_size 15
     pdf.text "Summary:", align: :center, styles: [:bold], :color => "137abf"
     pdf.font_size 12
