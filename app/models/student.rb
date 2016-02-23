@@ -17,4 +17,17 @@ class Student
     @github_url = hash["github_url"]
   end
 
+  def self.find(id)
+    Student.new(Unirest.get("https://****PUT*HEROKU*HERE****/students/#{id}").body)
+  end
+
+  def self.all
+    api_students_array = Unirest.get("https://****PUT*HEROKU*HERE****/students").body
+    students = []
+    api_students_array.each do |api_student|
+      students << Student.new(api_student)
+    end
+    return students
+  end
+
 end
